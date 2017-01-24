@@ -4,6 +4,7 @@ Retry a Task a given number of times until it succeeds.
 
 The module is built for use with [Folktale's Task monad](http://docs.folktalejs.org/en/latest/api/data/task/) ([data.task](https://github.com/folktale/data.task)).
 
+[![Build Status](https://travis-ci.org/philbot9/retry-task.svg?branch=master)](https://travis-ci.org/philbot9/retry-task)
 
 ## Usage
 
