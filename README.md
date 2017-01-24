@@ -36,9 +36,19 @@ const fork = t =>
   t.fork(console.error, console.log)
 
 // Basic
-const basic = retry(2, () =>
-  new Task((rej, res) => res('All good!')))
-fork(basic)
+let calls = 0
+const failTwice = () =>
+  new Task((rej, res) =>
+    calls++ >= 2 ? res('All good!') : rej('nope'))
+
+const basic1 = retry(2, failTwice)
+fork(basic1)
+
+const alwaysFail = () =>
+  new Task(rej => rej('ALWAYS BLUE!'))
+const basic2 = retry(2, alwaysFail)
+
+fork(basic2)
 
 // Fetching URLs with retries
 const fetchUrl = url =>
@@ -69,9 +79,19 @@ const fork = t =>
   t.fork(console.error, console.log)
 
 // Basic
-const basic = delayedRetry(2, 1000, () =>
-  new Task((rej, res) => res('All good!')))
-fork(basic)
+let calls = 0
+const failTwice = () =>
+  new Task((rej, res) =>
+    calls++ >= 2 ? res('All good!') : rej('nope'))
+
+const basic1 = delayedRetry(2, 1000, failTwice)
+fork(basic1)
+
+const alwaysFail = () =>
+  new Task(rej => rej('ALWAYS BLUE!'))
+const basic2 = delayedRetry(2, 1000, alwaysFail)
+
+fork(basic2)
 
 // Fetching URLs with retries
 const fetchUrl = url =>
@@ -91,12 +111,11 @@ const google = withDelayedRetries(() => fetchUrl('http://www.google.com/'))
 fork(npm2)
 fork(google)
 
-// With delay function
+// Custom delay function
 const delay = attemptNo =>
   attemptNo * 1000 // attemptNo is always >= 1
 
 const withCustomDelayedRetries = withRetries(delay)
 const npm3 = withCustomDelayedRetries(() => fetchUrl('http://www.npmjs.com'))
 fork(npm3)
-
 ```
